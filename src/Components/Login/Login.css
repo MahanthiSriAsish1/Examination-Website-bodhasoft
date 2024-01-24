@@ -1,0 +1,111 @@
+.wrapper{
+    width: 420px;
+    background: transparent;
+    color: white;
+    padding: 30px 40px;
+    border-radius: 20px;
+    border: 2px solid rgba(255,255,255,0.2);
+    backdrop-filter: blur(30px);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+} 
+
+.wrapper h1{
+    text-align: center;
+    font-size: 34px;
+}
+
+.wrapper .input-box{
+    position: relative;
+    width: 100%;
+    height: 50px;
+    margin: 30px 0;
+}
+
+.input-box input{
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    border: 2px solid rgba(255,255,255,0.2);
+    outline: none;
+    border-radius: 40px;
+    font-size: 16px;
+    color: white;
+    padding: 20px 45px 20px 20px ;
+}
+
+.input-box input::placeholder{
+    color: #fff;
+}
+
+.input-box .icon{
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 16px;
+}
+
+.wrapper .remember-forgot{
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    margin: -20px 0 20px;
+    padding: 0 10px 0 10px;
+}
+
+.remember-forgot label{
+    display: flex;
+    align-items: center;
+}
+
+.remember-forgot label input{
+    accent-color: white;   
+    margin-right: 2px; 
+
+}
+
+.remember-forgot a{
+    color: white;
+    text-decoration: none;
+}
+
+.remember-forgot a:hover{
+    text-decoration: underline;
+}
+
+.wrapper .LoginButton{
+    text-align: center;
+}
+
+.LoginButton button{
+    width: 50%;
+    padding: 13px 0;
+    font-size: 16px;
+    background: transparent;
+    border: 2px solid rgba(255,255,255,0.2);
+    outline: none;
+    border-radius: 40px;
+    color: white;
+    cursor: pointer;
+    color: white;
+    font-weight: 500;
+}
+
+.LoginButton button:hover{
+    box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.4);
+}
+
+.wrapper .register-link{
+    text-align: center;
+    margin: 20px 0px 15px;
+}
+
+.register-link a{
+    color: #fff;
+    text-decoration: none;
+    margin: 0 0 0 5px;    
+}
+
+.register-link a:hover{
+    text-decoration: underline;
+}
