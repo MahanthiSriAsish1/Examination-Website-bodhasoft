@@ -1,4 +1,4 @@
-import { Fragment, useState } from "react";
+import { useState } from "react";
 import React from 'react'
 import { FaUser,FaLock } from "react-icons/fa";
 import './Login.css'
@@ -39,11 +39,11 @@ const Login = () => {
             <form action="">
                 <h1>Login</h1>
                 <div className="input-box">
-                    <input type="text" placeholder="username" required />
+                    <input type="text" value={username} placeholder="username" required />
                     <FaUser className="icon" />
                 </div>
                 <div className="input-box">
-                    <input type="password" placeholder="password" required />
+                    <input type="password" value={password} placeholder="password" required />
                     <FaLock className="icon"/>
                 </div>
                 <div className="remember-forgot">
@@ -54,7 +54,7 @@ const Login = () => {
                     <button type="submit">Login</button>
                 </div>
                 <div className="register-link">
-                    <label>Don't Have an account?<a href="#">Register</a></label>
+                    <label>Don't Have an account?<a href="/Register">Register</a></label>
                 </div>
             </form>
         </div>
