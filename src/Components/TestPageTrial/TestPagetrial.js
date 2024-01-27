@@ -1,29 +1,95 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Navbar from '../Navbar/Navbar'
+import axios from 'axios'
 import './testpage.css'
 
 const TestPagetrial = () => {
-  const[QuestionNumber,setQuestionNumber] = useState('1')
+  const [QuestionIndex, setQuestionIndex] = useState('0')
+  const [selectedOption, setselectedOption] = useState('')
+  const [questionArray, setquestionArray] = useState([])
+  const [score, setscore] = useState('0')
+
+  useEffect(() => {
+    const getQuestionPaper = async () => {
+      try {
+        const response = await axios.get('')
+        setquestionArray = response.data
+      } catch (error) {
+        console.error('Error fetching question Paper', error);
+      }
+    }
+    getQuestionPaper();
+  }, [])
+
+  useEffect(() => {
+    console.log(selectedOption);
+  }, [selectedOption]);
+
+  const isLastQuestion = QuestionIndex === questionArray.length - 1;
+
+  const handleNext = () => {
+    const isCorrect = selectedOption === questionArray[QuestionIndex].correctAnswer;
+    if (isCorrect) {
+      setscore((prevScore) => prevScore + 1);
+    }
+    setQuestionIndex((prevIndex) => Math.min(prevIndex + 1, questionArray.length - 1));
+    setselectedOption(null); // Reset selected option for the next question
+  };
+
+  const handlePrevious = () => {
+    setQuestionIndex((prevIndex) => Math.max(prevIndex - 1, 0));
+    setselectedOption(null); // Reset selected option for the previous question
+  };
+
+  const handleOptionChange = (option) => {
+    setselectedOption(option);
+
+  };
+
+  const handleSubmit = () => {
+    const isCorrect = selectedOption === questionArray[QuestionIndex].correctAnswer;
+    if (isCorrect) {
+      setscore((prevScore) => prevScore + 1);
+    } else {
+      setscore((prevScore) => prevScore + 0);
+    }
+
+  }
   return (
     <div className='testpage-wrapper'>
       <Navbar />
       <div className='test-question'>
         <div className='question'>
-          <p>Q{QuestionNumber}</p>
-          <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Nostrum repudiandae ipsa, nihil facilis, similique voluptates ullam veritatis vero velit odio repellat quae itaque facere quod cupiditate nesciunt eligendi ipsum vel beatae earum odit explicabo placeat, amet et. Illum, animi ut? Quidem aliquam aliquid eum voluptatibus.</p>
+          <h3>Q{QuestionIndex + 1}</h3>
+          <p>{questionArray[QuestionIndex]}</p>
           <img src="" alt="" />
         </div>
         <div className='option-parent'>
           <form className='options'>
-            <label><input type="radio" name="options" />option1</label>
-            <label><input type="radio" name="options" />option2</label>
-            <label><input type="radio" name="options" />option3</label>
-            <label><input type="radio" name="options" />option4</label>
+            {Object.entries(questionArray[QuestionIndex].options).map(([key, value]) => (
+              <label key={key}>
+                <input
+                  type="radio"
+                  name="options"
+                  value={key}
+                  checked={selectedOption === key}
+                  onChange={() => handleOptionChange(key)}
+                />
+                {value}
+              </label>
+            ))}
           </form>
-          <div className='prev-next'>
-            <button>Previous</button>
-            <button>Next</button>
-          </div>
+          {isLastQuestion ? (
+            <div className='prev-next'>
+              <button onClick={handlePrevious} disabled={QuestionIndex === 0}>Previous</button>
+              <button onClick={handleSubmit}>Submit</button>
+            </div>
+          ) : (
+            <div className='prev-next'>
+              <button onClick={handlePrevious} disabled={QuestionIndex === 0}>Previous</button>
+              <button onClick={handleNext} disabled={QuestionIndex === questionArray.length - 1}>Next</button>
+            </div>
+          )}
         </div>
       </div>
     </div>
