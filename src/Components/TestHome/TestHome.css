@@ -1,0 +1,86 @@
+* {
+    box-sizing: border-box;
+  }
+  
+  /* For desktop: */
+  
+  
+  .col-6 {width: 49.4%;}
+  
+  
+  @media only screen and (max-width: 768px) {
+    /* For mobile phones: */
+    [class*="col-"] {
+      width: 100%;
+    }
+    table{
+      margin-top: 34px;
+    }
+  }
+  [class*="col-"] {
+    float: left;
+    padding: 15px;
+    margin: 3px;
+    box-shadow: 0 0 4px black;
+    height: 580px;
+  }
+  
+  
+  img {
+    height: 58px;
+  }
+  
+  .nav {
+    display: flex;
+    justify-content: space-between;
+    box-shadow: 0 0 3px gray;
+    padding: 3px;
+    width: 100%;
+    background-color:rgb(255, 255, 255);
+    position: fixed;
+    top: 0px;
+    
+  }
+  
+  .rows {
+    position: relative;
+    top: 97px;
+    box-shadow: 0 0 4px black;
+  }
+  .heading {
+    
+    font-size: 29px;
+    margin-top: 10px 
+  }
+  table {
+    width: 53%;
+    position: relative;
+    margin-top: 93px;
+    margin-left: 20px;
+    margin-bottom: 10px;
+  }
+  .content {
+    padding: 84px;
+    margin: 17px;
+    text-align: center;
+    font-size: 33px;
+    box-shadow: 0 0 2px black;
+  }
+  h2 {
+    font-size: 28px;
+    font-weight: unset;
+  }
+  .instructions{
+    height: 384px;
+    overflow-y: auto; 
+    border: 1px solid #ccc; 
+    padding: 10px; 
+  }
+  .box col-6 button {
+    margin-top: 37px;
+    height: 39px;
+    width: 107px;
+    font-size: 20px;
+    background-color: #eb2f96;
+    color: white;
+  }

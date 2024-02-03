@@ -1,19 +1,24 @@
 import React, { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom';
 import Navbar from '../Navbar/Navbar'
 import axios from 'axios'
 import './testpage.css'
 
-const TestPagetrial = () => {
-  const [QuestionIndex, setQuestionIndex] = useState('0')
-  const [selectedOption, setselectedOption] = useState('')
+const TestPagetrial = ({ formData }) => {
+  const [QuestionIndex, setQuestionIndex] = useState(0)
+  const [selectedOption, setselectedOption] = useState(
+    localStorage.getItem(`selectedOption_${QuestionIndex}`) || ''
+  );
   const [questionArray, setquestionArray] = useState([])
-  const [score, setscore] = useState('0')
+  const [score, setscore] = useState(0)
+  const navigate = useNavigate();
+
 
   useEffect(() => {
     const getQuestionPaper = async () => {
       try {
-        const response = await axios.get('')
-        setquestionArray = response.data
+        const response = await axios.get('http://localhost:3001/api/QuestionPaper')
+        setquestionArray(response.data)
       } catch (error) {
         console.error('Error fetching question Paper', error);
       }
@@ -22,62 +27,88 @@ const TestPagetrial = () => {
   }, [])
 
   useEffect(() => {
-    console.log(selectedOption);
-  }, [selectedOption]);
-
+    localStorage.setItem(`selectedOption_${QuestionIndex}`, selectedOption);
+  }, [selectedOption, QuestionIndex]);
+   
   const isLastQuestion = QuestionIndex === questionArray.length - 1;
 
   const handleNext = () => {
     const isCorrect = selectedOption === questionArray[QuestionIndex].correctAnswer;
     if (isCorrect) {
-      setscore((prevScore) => prevScore + 1);
+      setscore(score+1);
     }
     setQuestionIndex((prevIndex) => Math.min(prevIndex + 1, questionArray.length - 1));
-    setselectedOption(null); // Reset selected option for the next question
+    setselectedOption('');
   };
 
   const handlePrevious = () => {
     setQuestionIndex((prevIndex) => Math.max(prevIndex - 1, 0));
-    setselectedOption(null); // Reset selected option for the previous question
+    setselectedOption('');
   };
 
   const handleOptionChange = (option) => {
     setselectedOption(option);
-
   };
 
-  const handleSubmit = () => {
+  const renderOptions = () => {
+    if(questionArray.length === 0){
+      return
+    }
+    let options = []
+    Object.entries(questionArray[QuestionIndex].options).forEach(([key, value]) => {
+      options.push(
+        <label key={key}>
+          <input
+            type="radio"
+            name="options"
+            value={value}
+            checked={selectedOption === value}
+            onChange={() => handleOptionChange(value)}
+          />
+          {value}
+        </label>
+      )
+    })
+    return options
+  }
+
+  const handleSubmit = async() => {
     const isCorrect = selectedOption === questionArray[QuestionIndex].correctAnswer;
     if (isCorrect) {
-      setscore((prevScore) => prevScore + 1);
-    } else {
-      setscore((prevScore) => prevScore + 0);
+      await setscore(score + 1);
     }
-
+    const postData = {
+      fullName: formData.fullName,
+        email: formData.email,
+        college: formData.college,
+        score: score,
+    }
+    try{
+      const response = await axios.post('http://localhost:3001/api/upload-results',postData)
+      if(response.status === 200){
+        for (let i = 0; i < questionArray.length; i++) {
+          localStorage.removeItem(`selectedOption_${i}`);
+        }
+        navigate('/EndPage')
+      }
+    }catch(e){
+      alert('Error occurred while submitting.');
+    }
   }
+
   return (
     <div className='testpage-wrapper'>
       <Navbar />
       <div className='test-question'>
         <div className='question'>
           <h3>Q{QuestionIndex + 1}</h3>
-          <p>{questionArray[QuestionIndex]}</p>
-          <img src="" alt="" />
+          <p>{questionArray[QuestionIndex]?.question}</p>
         </div>
         <div className='option-parent'>
           <form className='options'>
-            {Object.entries(questionArray[QuestionIndex].options).map(([key, value]) => (
-              <label key={key}>
-                <input
-                  type="radio"
-                  name="options"
-                  value={key}
-                  checked={selectedOption === key}
-                  onChange={() => handleOptionChange(key)}
-                />
-                {value}
-              </label>
-            ))}
+            {
+              renderOptions()
+            }
           </form>
           {isLastQuestion ? (
             <div className='prev-next'>

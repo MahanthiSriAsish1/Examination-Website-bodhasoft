@@ -55,6 +55,7 @@
     border-radius: 5px;
     background: transparent;
     border: 2px solid rgba(101, 101, 101, 0.1);
+    color: black;
     cursor: pointer;
     text-align: center;
     padding: 8px;
